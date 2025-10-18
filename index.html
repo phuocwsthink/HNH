@@ -16,7 +16,7 @@
 </head>
     <body>
  
-			<audio autoplay="autoplay" >
+			<audio id="bgMusic" preload="auto" >
 					<source src="music/nhac.mp3" type="audio/mp3" />
             </audio> 
 
@@ -59,7 +59,8 @@
     <script>
     (function(){
         var canvas = $('#canvas');
-		
+		var audio = document.getElementById('bgMusic');
+
         if (!canvas[0].getContext) {
             $("#error").show();
             return false;        }
@@ -110,6 +111,16 @@
         var hold = 1;
 
         canvas.click(function(e) {
+            if (audio.paused) {
+                audio.play().then(function(){
+                    btn.textContent = 'Pause music';
+                }).catch(function(err){
+                    console.warn('Playback prevented:', err);
+                });
+            } else {
+                audio.pause();
+                btn.textContent = 'Play music';
+            }
             var offset = canvas.offset(), x, y;
             x = e.pageX - offset.left;
             y = e.pageY - offset.top;
